@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtracija Brojeva</title>
+  <style>
+    .card {
+      margin: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<div id="filters">
+  <label for="minRange">Minimum:</label>
+  <input type="range" id="minRange" min="0" max="100" value="0">
+ 
+  <label for="maxRange">Maximum:</label>
+  <input type="range" id="maxRange" min="0" max="100" value="100">
+ 
+  <label for="evenCheckbox">Parni Brojevi</label>
+  <input type="checkbox" id="evenCheckbox" checked>
+ 
+  <label for="oddCheckbox">Neparni Brojevi</label>
+  <input type="checkbox" id="oddCheckbox" checked>
+</div>
+
+<div id="numberCards"></div>
+
+<script>
+  function generateNumbers(min, max) {
+    const numbers = [];
+    for (let i = min; i <= max; i++) {
+      numbers.push(i);
+    }
+    return numbers;
+  }
+  function filterNumbers(numbers, min, max, even, odd) {
+    return numbers.filter(num =>
+      (num >= min && num <= max) &&
+      (even && num % 2 === 0 || odd && num % 2 !== 0)
+    );
+  }
+  function renderNumberCards(filteredNumbers) {
+    const numberCardsContainer = document.getElementById('numberCards');
+    numberCardsContainer.innerHTML = "";
+
+    filteredNumbers.forEach(num => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.textContent = num;
+      numberCardsContainer.appendChild(card);
+    });
+  }
+  function handleFiltersChange() {
+    const minRange = document.getElementById('minRange').valueAsNumber;
+    const maxRange = document.getElementById('maxRange').valueAsNumber;
+    const evenCheckbox = document.getElementById('evenCheckbox').checked;
+    const oddCheckbox = document.getElementById('oddCheckbox').checked;
+
+    const generatedNumbers = generateNumbers(0, 100);
+    const filteredNumbers = filterNumbers(generatedNumbers, minRange, maxRange, evenCheckbox, oddCheckbox);
+    renderNumberCards(filteredNumbers);
+  }
+  document.getElementById('minRange').addEventListener('input', handleFiltersChange);
+  document.getElementById('maxRange').addEventListener('input', handleFiltersChange);
+  document.getElementById('evenCheckbox').addEventListener('change', handleFiltersChange);
+  document.getElementById('oddCheckbox').addEventListener('change', handleFiltersChange);
+  handleFiltersChange();
+</script>
+
+</body>
+</html>
